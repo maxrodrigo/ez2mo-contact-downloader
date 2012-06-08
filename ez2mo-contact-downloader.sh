@@ -5,7 +5,7 @@ read -s -p "Password: " PASS
 
 COOKIE_FILE=ez2mo_cookie
 RAW_FILE=contacts_raw
-CONTACT_FILE=contacts
+CONTACT_FILE=contacts.html
 
 if [ -f $CONTACT_FILE ]; then
   rm $CONTACT_FILE
@@ -28,9 +28,8 @@ else
   done
   echo "Processing results..."
 
-  NUMBERS_ARRAY=$(cat $RAW_FILE | sed -n -e '/&nbsp;/!s/<td.*>\(.*\)<\/td>/\1/gp' | sed 's/\([[:digit:]]\)$/\1/g')
-
-  echo $NUMBERS_ARRAY >> $CONTACT_FILE
+  CONTACTS_STRING=$(cat $RAW_FILE | sed -n -e '/&nbsp;/!s/<td.*>\(.*\)<\/td>/\1/gp' | sed 's/\([[:digit:]]\)$/\1<br\/>/g' )
+  echo $CONTACTS_STRING >> $CONTACT_FILE
   rm $RAW_FILE
 fi
 rm $COOKIE_FILE
